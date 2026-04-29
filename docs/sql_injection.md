@@ -1,5 +1,11 @@
 # SQL Injection
 
+> **Project Status:**
+> - [x] Vulnerability demonstrated
+> - [ ] Fix implemented (see Day 6)
+
+---
+
 ## What is SQL Injection?
 SQL Injection is an attack that manipulates a database query by 
 injecting special characters into user input fields. Instead of 
