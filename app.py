@@ -27,6 +27,7 @@ def login():
 
         # VULNERABLE: string concatenation - never do this in real life
         query = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "'"
+        print(f"[DEBUG] Executing query: {query}")
         cursor.execute(query)
         user = cursor.fetchone()
         conn.close()
