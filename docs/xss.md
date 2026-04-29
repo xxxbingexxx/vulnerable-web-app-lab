@@ -92,7 +92,7 @@ Jinja2 converts dangerous characters automatically:
 
 So `<script>alert('hacked')</script>` becomes:
 
-==&lt;script&gt;alert('hacked')&lt;/script&gt;==
+`&lt;script&gt;alert('hacked')&lt;/script&gt;`
 
 The browser displays it as harmless text — never executes it.
 
