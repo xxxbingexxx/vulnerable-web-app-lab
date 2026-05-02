@@ -2,7 +2,7 @@
 
 > **Project Status:**
 > - [x] Vulnerability demonstrated
-> - [ ] Fix implemented (see Day 6)
+> - [x] Fix implemented (see Day 6)
 
 ---
 
