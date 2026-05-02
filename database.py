@@ -1,4 +1,5 @@
 import sqlite3
+import bcrypt
 
 def init_db():
     # Connect to database (creates file if it doesn't exist)
@@ -9,7 +10,7 @@ def init_db():
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT NOT NULL,
+            username TEXT NOT NULL UNIQUE,
             password TEXT NOT NULL
         )
     ''')
@@ -23,9 +24,10 @@ def init_db():
         )
     ''')
 
-    # Insert a test user (plaintext password - intentionally insecure)
-    cursor.execute("INSERT OR IGNORE INTO users (username, password) VALUES ('admin', 'password123')")
-
+    # Hash the password before storing
+    hashed = bcrypt.hashpw(b'password123', bcrypt.gensalt())
+    cursor.execute("INSERT OR IGNORE INTO users (username, password) VALUES ('admin', ?)", (hashed,))
+    
     conn.commit()
     conn.close()
 

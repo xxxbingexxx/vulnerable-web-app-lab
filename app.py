@@ -1,5 +1,6 @@
 from flask import Flask, request, redirect, url_for, session, render_template
 import sqlite3
+import bcrypt
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
@@ -25,14 +26,14 @@ def login():
         conn = get_db()
         cursor = conn.cursor()
 
-        # VULNERABLE: string concatenation - never do this in real life
-        query = "SELECT * FROM users WHERE username = ? AND password = ?"
-        print(f"[DEBUG] Executing query: {query} | Params: ({username}, {password})")
-        cursor.execute(query, (username, password))
+        # SECURE: parameterized query
+        query = "SELECT * FROM users WHERE username = ?"
+        print(f"[DEBUG] Executing query: {query} | Params: ({username},)")
+        cursor.execute(query, (username,))
         user = cursor.fetchone()
         conn.close()
 
-        if user:
+        if user and bcrypt.checkpw(password.encode('utf-8'), user['password']):
             session['username'] = user['username']
             return redirect(url_for('comments'))
         else:
