@@ -26,9 +26,9 @@ def login():
         cursor = conn.cursor()
 
         # VULNERABLE: string concatenation - never do this in real life
-        query = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "'"
-        print(f"[DEBUG] Executing query: {query}")
-        cursor.execute(query)
+        query = "SELECT * FROM users WHERE username = ? AND password = ?"
+        print(f"[DEBUG] Executing query: {query} | Params: ({username}, {password})")
+        cursor.execute(query, (username, password))
         user = cursor.fetchone()
         conn.close()
 
