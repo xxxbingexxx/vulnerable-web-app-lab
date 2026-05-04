@@ -108,3 +108,33 @@ Visit **http://127.0.0.1:5000** in your browser.
 | SQL Injection | Username: `admin'--` | Vulnerable: success, Secured: fail |
 | SQL Injection | Username: `' OR '1'='1'--` | Vulnerable: success, Secured: fail |
 | XSS | Comment: `<script>alert('hacked')</script>` | Vulnerable: popup, Secured: plain text |
+
+## Key Security Takeaways
+
+* **Never trust user input.** User input should always be treated 
+  as potentially malicious. Trusting input blindly allows attackers 
+  to manipulate your application's logic: bypassing authentication, 
+  extracting database contents, or even injecting code that executes in 
+  other users' browsers.
+
+* **Separate code from data.** The root cause of SQL Injection is 
+  mixing user input with code. Parameterized queries fix this by 
+  keeping them in completely separate channels. User input can 
+  never change the query's logic no matter what it contains.
+
+* **Escape before rendering.** The root cause of XSS is rendering 
+  user input as code instead of text. Always escape user input 
+  before displaying it. What looks like harmless text to you 
+  could be executable JavaScript to a browser.
+
+* **Never store plaintext passwords.** A database breach is bad. 
+  A database breach with plaintext passwords is catastrophic. 
+  Every user's password is immediately readable and usable on 
+  every other site they use the same password on. Always hash 
+  with bcrypt.
+
+* **Attacks chain together.** The most dangerous scenarios combine 
+  multiple vulnerabilities. SQL Injection can expose a database 
+  full of plaintext passwords, which then compromise users across 
+  every site they use the same password on. Security is only as 
+  strong as its weakest layer.
