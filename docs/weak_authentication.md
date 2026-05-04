@@ -40,6 +40,28 @@ Hashed:     $2b$12$2AXz./71pBLQ0DWzxphoweDDxPOgKF9gI7Vym9aUTFMB8RCjEZzzu
 
 The app never stores or compares plaintext passwords, only hashes.
 
+**Vulnerable code:**
+```python
+# Password stored as plaintext
+cursor.execute("INSERT OR IGNORE INTO users (username, password) 
+               VALUES ('admin', 'password123')")
+```
+
+**Secure code:**
+```python
+# Password hashed with bcrypt before storing
+hashed = bcrypt.hashpw(b'password123', bcrypt.gensalt())
+cursor.execute("INSERT OR IGNORE INTO users (username, password) 
+               VALUES ('admin', ?)", (hashed,))
+```
+
+**Verification at login:**
+```python
+# Never compare plaintext, only compare hashes
+if user and bcrypt.checkpw(password.encode('utf-8'), user['password']):
+    session['username'] = user['username']
+```
+
 **Login flow with hashing:**
 ```
 User enters password
