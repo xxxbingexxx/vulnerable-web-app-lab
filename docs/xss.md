@@ -50,6 +50,7 @@ directly as HTML, including JavaScript.
 - Browser executed the JavaScript — popup appeared
 
 **Why "Stored" XSS?**
+
 The malicious script is saved in the database permanently.
 Every user who visits the comments page executes the attack, not just the attacker. This makes it the most dangerous type of XSS.
 
