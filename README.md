@@ -47,9 +47,13 @@ explain both the vulnerabilities and defenses clearly.
   with `| safe`, then posted `<script>alert('hacked')</script>` 
   as a comment. The script executed in every visitor's browser.
 
-| ![XSS Injection](screenshots/XSS_inject.gif) | ![XSS Victim](screenshots/XSS_victim.gif) |
-|:--:|:--:|
-| *Injecting malicious JavaScript as a comment* | *Another user's browser executing the injected script* |
+| ![XSS Injection](screenshots/XSS_inject.gif) |
+|:--:|
+| *Injecting malicious JavaScript as a comment* |
+
+| ![XSS Victim](screenshots/XSS_victim.gif) |
+|:--:|
+| *Another user's browser executing the injected script* |
 
 * **The fix:** Remove `| safe` and let Jinja2 auto-escape user 
   input. Special characters are converted to harmless text before 
