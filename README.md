@@ -108,6 +108,9 @@ Login credentials:
 # Switch to secured branch
 git checkout secured
 
+# Delete the old database first
+del users.db
+
 # Reinitialize the database (uses bcrypt hashing)
 python database.py
 
@@ -115,6 +118,10 @@ python database.py
 python app.py
 ```
 Visit **http://127.0.0.1:5000** in your browser.
+
+> **Note:** Deleting the database is necessary because the 
+> vulnerable version stores plaintext passwords. The secured 
+> version uses bcrypt hashing. The two formats are incompatible.
 
 ### Try The Attacks
 | Attack | Input | Expected Result |
