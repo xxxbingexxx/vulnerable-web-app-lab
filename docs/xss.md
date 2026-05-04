@@ -98,5 +98,33 @@ So `<script>alert('hacked')</script>` becomes:
 
 The browser displays it as harmless text. It never executes it.
 
+## Beyond Jinja2
+The `| safe` filter is Jinja2 specific, but XSS exists in 
+every framework wherever user input is rendered as raw HTML 
+instead of text.
+
+```
+// Vulnerable in different frameworks
+dangerouslySetInnerHTML={{ __html: userInput }}  // React
+$('#comments').html(userInput)                    // jQuery
+document.getElementById('x').innerHTML = input   // JavaScript
+echo $_POST['comment'];                           // PHP
+
+// Secure alternatives
+<div>{userInput}</div>                            // React (default)
+$('#comments').text(userInput)                    // jQuery
+document.getElementById('x').textContent = input // JavaScript
+echo htmlspecialchars($_POST['comment']);          // PHP
+```
+
+Most modern frameworks escape user input by default. XSS occurs 
+when developers deliberately bypass that protection. Notice that 
+the bypass methods all hint at their danger:
+- `| safe` — implies the input is safe when it may not be
+- `dangerouslySetInnerHTML` — explicitly warns of danger
+- `.html()` vs `.text()` — the distinction is in the name
+
+The universal rule: treat user input as text, never as HTML.
+
 ## Key Takeaway
 > "Never trust user input. Always escape before rendering."
