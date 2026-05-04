@@ -50,8 +50,61 @@ explain both the vulnerabilities and defenses clearly.
   database breach immediately exposes every user's password. 
   Combined with password reuse, one leaked database can 
   compromise accounts across multiple websites.
-* **How we demonstrated it:** Stored `password123` in plaintext, 
-  then showed it was directly readable with a simple database query.
+* **How we demonstrated it:** Stored `password123` in plaintext. Queried the database directly to 
+  show passwords are stored as plain readable text. In practice, 
+  an attacker could gain database access through SQL Injection.
 * **The fix:** bcrypt hashing. Passwords are transformed before 
   storage using salting and slow computation, making rainbow table 
   and brute force attacks impractical.
+
+## How To Run The Project
+
+### Prerequisites
+- Python 3.x — [download here](https://python.org/downloads)
+
+### Installation
+```cmd
+# Clone the repository
+git clone https://github.com/xxxbingexxx/vulnerable-web-app-lab
+cd vulnerable-web-app-lab
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+### Run the Vulnerable Version
+```cmd
+# Switch to main branch
+git checkout main
+
+# Initialize the database
+python database.py
+
+# Start the app
+python app.py
+```
+Visit **http://127.0.0.1:5000** in your browser.
+
+Login credentials:
+- Username: `admin`
+- Password: `password123`
+
+### Run the Secured Version
+```cmd
+# Switch to secured branch
+git checkout secured
+
+# Reinitialize the database (uses bcrypt hashing)
+python database.py
+
+# Start the app
+python app.py
+```
+Visit **http://127.0.0.1:5000** in your browser.
+
+### Try The Attacks
+| Attack | Input | Expected Result |
+|--------|-------|-----------------|
+| SQL Injection | Username: `admin'--` | Vulnerable: success, Secured: fail |
+| SQL Injection | Username: `' OR '1'='1'--` | Vulnerable: success, Secured: fail |
+| XSS | Comment: `<script>alert('hacked')</script>` | Vulnerable: popup, Secured: plain text |
