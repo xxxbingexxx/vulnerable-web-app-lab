@@ -30,6 +30,11 @@ explain both the vulnerabilities and defenses clearly.
   concatenation, then bypassed it using `admin'--` to eliminate 
   the password check and `' OR '1'='1'--` to log in without 
   any credentials.
+
+  | ![SQL Injection - Known User](screenshots/SQL_injection_admin.gif) | ![SQL Injection - No Credentials](screenshots/SQL_injection_or.gif) |
+  |:--:|:--:|
+  | *Bypassing login with a known username using `admin'--`* | *Bypassing login without any credentials using `' OR '1'='1'--`* |
+  
 * **The fix:** Parameterized queries. Query structure and user 
   input are sent to the database separately. Input can never 
   change the query's logic no matter what it contains.
@@ -41,6 +46,11 @@ explain both the vulnerabilities and defenses clearly.
 * **How we demonstrated it:** Disabled Jinja2's auto-escaping 
   with `| safe`, then posted `<script>alert('hacked')</script>` 
   as a comment. The script executed in every visitor's browser.
+
+  | ![XSS Injection](screenshots/XSS_inject.gif) | ![XSS Victim](screenshots/XSS_victim.gif) |
+  |:--:|:--:|
+  | *Injecting malicious JavaScript as a comment* | *Another user's browser executing the injected script* |
+
 * **The fix:** Remove `| safe` and let Jinja2 auto-escape user 
   input. Special characters are converted to harmless text before 
   the browser ever sees them.
