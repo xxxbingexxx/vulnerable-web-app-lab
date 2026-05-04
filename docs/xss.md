@@ -33,7 +33,7 @@ completely.
 ```
 
 With `| safe` enabled, anything stored in the database is rendered 
-directly as HTML — including JavaScript.
+directly as HTML, including JavaScript.
 
 ## Demonstration — Stored XSS Attack
 
@@ -51,8 +51,7 @@ directly as HTML — including JavaScript.
 
 **Why "Stored" XSS?**
 The malicious script is saved in the database permanently.
-Every user who visits the comments page executes the attack —
-not just the attacker. This makes it the most dangerous type of XSS.
+Every user who visits the comments page executes the attack, not just the attacker. This makes it the most dangerous type of XSS.
 
 ## Real World Impact
 A real attacker wouldn't just show a popup. JavaScript can:
@@ -85,16 +84,18 @@ auto-escape user input.
 ```
 
 Jinja2 converts dangerous characters automatically:
-<  →  <
-→  >
-'  →  '
-"  →  "
+```
+<  →  &lt;
+>  →  &gt;
+'  →  &#39;
+"  →  &quot;
+```
 
 So `<script>alert('hacked')</script>` becomes:
 
 `&lt;script&gt;alert('hacked')&lt;/script&gt;`
 
-The browser displays it as harmless text — never executes it.
+The browser displays it as harmless text. It never executes it.
 
 ## Key Takeaway
 > "Never trust user input. Always escape before rendering."
