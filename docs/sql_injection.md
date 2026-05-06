@@ -84,3 +84,86 @@ to become code.
 ## Key Takeaway
 > "The database can't tell the difference between developer 
 > code and attacker input, unless you keep them separate."
+
+## Beyond Login Bypass — Data Extraction
+
+Login bypass is just the beginning. A more powerful SQL Injection 
+technique called **UNION-based injection** allows attackers to 
+extract data directly from the database, bypassing the application 
+entirely.
+
+### How UNION Injection Works
+In SQL, `UNION` combines the results of two queries:
+
+```sql
+SELECT id, username FROM users WHERE username = 'admin'
+UNION
+SELECT id, password FROM users
+```
+
+An attacker can inject a UNION statement into any vulnerable query 
+that displays results on the page, like a search bar.
+
+### The Attack
+If a search page builds queries like this:
+
+```python
+# VULNERABLE
+query = "SELECT id, username FROM users WHERE username = '" + search_term + "'"
+```
+
+An attacker searches for:
+```
+' UNION SELECT id, password FROM users--
+```
+
+Which builds:
+```sql
+SELECT id, username FROM users WHERE username = ''
+UNION
+SELECT id, password FROM users--'
+```
+
+Every password in the database is now displayed on screen in 
+place of usernames.
+
+### Why It Works
+UNION injection works by matching column positions, not column names:
+
+```
+| id  | username    |  ← column names from first query
+|-----|-------------|
+| 1   | password123 |  ← password fills the username slot
+| 2   | supersecret |  ← password fills the username slot
+```
+
+The first query determines column names. The attacker controls 
+what data fills each position.
+
+### Real World Impact
+In a real application the database might contain:
+```
+credit card numbers
+social security numbers  
+private messages
+API keys
+admin credentials
+```
+
+All potentially extractable through a single vulnerable input field.
+
+### The Fix
+Parameterized queries, same as login bypass:
+
+```python
+# SECURE
+query = "SELECT id, username FROM users WHERE username = ?"
+cursor.execute(query, (search_term,))
+```
+
+User input is treated as data, never as SQL. UNION injection 
+becomes impossible regardless of what the attacker types.
+
+### Key Insight
+> "Login bypass gives an attacker access to the application. 
+> Data extraction gives them access to everything behind it."
